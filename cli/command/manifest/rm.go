@@ -8,7 +8,7 @@ import (
 )
 
 type rmOpts struct {
-	target   string
+	target string
 }
 
 func newRmManifestListCommand(dockerCli command.Cli) *cobra.Command {

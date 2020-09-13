@@ -217,6 +217,16 @@ func TestToServiceNetwork(t *testing.T) {
 	assert.Check(t, is.DeepEqual([]swarm.NetworkAttachmentConfig{{Target: "id111"}, {Target: "id555"}, {Target: "id999"}}, service.TaskTemplate.Networks))
 }
 
+func TestToServicePidsLimit(t *testing.T) {
+	flags := newCreateCommand(nil).Flags()
+	opt := newServiceOptions()
+	opt.mode = "replicated"
+	opt.resources.limitPids = 100
+	service, err := opt.ToService(context.Background(), &fakeClient{}, flags)
+	assert.NilError(t, err)
+	assert.Equal(t, service.TaskTemplate.Resources.Limits.Pids, int64(100))
+}
+
 func TestToServiceUpdateRollback(t *testing.T) {
 	expected := swarm.ServiceSpec{
 		UpdateConfig: &swarm.UpdateConfig{
@@ -285,7 +295,7 @@ func TestToServiceMaxReplicasGlobalModeConflict(t *testing.T) {
 		maxReplicas: 1,
 	}
 	_, err := opt.ToServiceMode()
-	assert.Error(t, err, "replicas-max-per-node can only be used with replicated mode")
+	assert.Error(t, err, "replicas-max-per-node can only be used with replicated or replicated-job mode")
 }
 
 func TestToServiceSysCtls(t *testing.T) {

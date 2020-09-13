@@ -9,7 +9,6 @@ import (
 	"runtime"
 	"strconv"
 	"strings"
-	"sync"
 	"time"
 
 	"github.com/docker/cli/cli/config"
@@ -30,8 +29,8 @@ import (
 	"github.com/docker/docker/api/types"
 	registrytypes "github.com/docker/docker/api/types/registry"
 	"github.com/docker/docker/client"
-	"github.com/docker/docker/pkg/term"
 	"github.com/docker/go-connections/tlsconfig"
+	"github.com/moby/term"
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 	"github.com/theupdateframework/notary"
@@ -118,7 +117,7 @@ func (cli *DockerCli) In() *streams.In {
 // ShowHelp shows the command help.
 func ShowHelp(err io.Writer) func(*cobra.Command, []string) error {
 	return func(cmd *cobra.Command, args []string) error {
-		cmd.SetOutput(err)
+		cmd.SetOut(err)
 		cmd.HelpFunc()(cmd, args)
 		return nil
 	}
@@ -136,19 +135,18 @@ func (cli *DockerCli) loadConfigFile() {
 	cli.configFile = cliconfig.LoadDefaultConfigFile(cli.err)
 }
 
-var fetchServerInfo sync.Once
-
 // ServerInfo returns the server version details for the host this client is
 // connected to
 func (cli *DockerCli) ServerInfo() ServerInfo {
-	fetchServerInfo.Do(cli.initializeFromClient)
 	return cli.serverInfo
 }
 
 // ClientInfo returns the client details for the cli
 func (cli *DockerCli) ClientInfo() ClientInfo {
 	if cli.clientInfo == nil {
-		_ = cli.loadClientInfo()
+		if err := cli.loadClientInfo(); err != nil {
+			panic(err)
+		}
 	}
 	return *cli.clientInfo
 }
@@ -276,6 +274,12 @@ func (cli *DockerCli) Initialize(opts *cliflags.ClientOptions, ops ...Initialize
 			return err
 		}
 	}
+	cli.initializeFromClient()
+
+	if err := cli.loadClientInfo(); err != nil {
+		return err
+	}
+
 	return nil
 }
 

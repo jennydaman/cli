@@ -18,79 +18,85 @@ redirect_from:
 # daemon
 
 ```markdown
-Usage:	dockerd COMMAND
+Usage: dockerd COMMAND
 
 A self-sufficient runtime for containers.
 
 Options:
       --add-runtime runtime                   Register an additional OCI compatible runtime (default [])
-      --allow-nondistributable-artifacts list Push nondistributable artifacts to specified registries (default [])
+      --allow-nondistributable-artifacts list Allow push of nondistributable artifacts to registry
       --api-cors-header string                Set CORS headers in the Engine API
-      --authorization-plugin list             Authorization plugins to load (default [])
+      --authorization-plugin list             Authorization plugins to load
       --bip string                            Specify network bridge IP
   -b, --bridge string                         Attach containers to a network bridge
       --cgroup-parent string                  Set parent cgroup for all containers
-      --cluster-advertise string              Address or interface name to advertise
-      --cluster-store string                  URL of the distributed storage backend
-      --cluster-store-opt map                 Set cluster store options (default map[])
       --config-file string                    Daemon configuration file (default "/etc/docker/daemon.json")
-      --containerd string                     Path to containerd socket
-      --cpu-rt-period int                     Limit the CPU real-time period in microseconds
-      --cpu-rt-runtime int                    Limit the CPU real-time runtime in microseconds
+      --containerd string                     containerd grpc address
+      --cpu-rt-period int                     Limit the CPU real-time period in microseconds for the
+                                              parent cgroup for all containers
+      --cpu-rt-runtime int                    Limit the CPU real-time runtime in microseconds for the
+                                              parent cgroup for all containers
+      --cri-containerd                        start containerd with cri
       --data-root string                      Root directory of persistent Docker state (default "/var/lib/docker")
   -D, --debug                                 Enable debug mode
-      --default-cgroupns-mode string          Container default cgroup namespace mode (default "host")
+      --default-address-pool pool-options     Default address pools for node specific local networks
+      --default-cgroupns-mode string          Default mode for containers cgroup namespace ("host" | "private") (default "host")
       --default-gateway ip                    Container default gateway IPv4 address
       --default-gateway-v6 ip                 Container default gateway IPv6 address
-      --default-address-pool                  Set the default address pool for local node networks
+      --default-ipc-mode string               Default mode for containers ipc ("shareable" | "private") (default "private")
       --default-runtime string                Default OCI runtime for containers (default "runc")
+      --default-shm-size bytes                Default shm size for containers (default 64MiB)
       --default-ulimit ulimit                 Default ulimits for containers (default [])
-      --dns list                              DNS server to use (default [])
-      --dns-opt list                          DNS options to use (default [])
-      --dns-search list                       DNS search domains to use (default [])
-      --exec-opt list                         Runtime execution options (default [])
+      --dns list                              DNS server to use
+      --dns-opt list                          DNS options to use
+      --dns-search list                       DNS search domains to use
+      --exec-opt list                         Runtime execution options
       --exec-root string                      Root directory for execution state files (default "/var/run/docker")
       --experimental                          Enable experimental features
       --fixed-cidr string                     IPv4 subnet for fixed IPs
       --fixed-cidr-v6 string                  IPv6 subnet for fixed IPs
   -G, --group string                          Group for the unix socket (default "docker")
       --help                                  Print usage
-  -H, --host list                             Daemon socket(s) to connect to (default [])
+  -H, --host list                             Daemon socket(s) to connect to
+      --host-gateway-ip ip                    IP address that the special 'host-gateway' string in --add-host resolves to.
+                                              Defaults to the IP address of the default bridge
       --icc                                   Enable inter-container communication (default true)
       --init                                  Run an init in the container to forward signals and reap processes
       --init-path string                      Path to the docker-init binary
-      --insecure-registry list                Enable insecure registry communication (default [])
+      --insecure-registry list                Enable insecure registry communication
       --ip ip                                 Default IP when binding container ports (default 0.0.0.0)
       --ip-forward                            Enable net.ipv4.ip_forward (default true)
       --ip-masq                               Enable IP masquerading (default true)
       --iptables                              Enable addition of iptables rules (default true)
       --ipv6                                  Enable IPv6 networking
-      --label list                            Set key=value labels to the daemon (default [])
+      --label list                            Set key=value labels to the daemon
       --live-restore                          Enable live restore of docker when containers are still running
       --log-driver string                     Default driver for container logs (default "json-file")
-  -l, --log-level string                      Set the logging level ("debug", "info", "warn", "error", "fatal") (default "info")
+  -l, --log-level string                      Set the logging level ("debug"|"info"|"warn"|"error"|"fatal") (default "info")
       --log-opt map                           Default log driver options for containers (default map[])
       --max-concurrent-downloads int          Set the max concurrent downloads for each pull (default 3)
       --max-concurrent-uploads int            Set the max concurrent uploads for each push (default 5)
       --max-download-attempts int             Set the max download attempts for each pull (default 5)
       --metrics-addr string                   Set default address and port to serve the metrics api on
       --mtu int                               Set the containers network MTU
-      --node-generic-resources list           Advertise user-defined resource
+      --network-control-plane-mtu int         Network Control plane MTU (default 1500)
       --no-new-privileges                     Set no-new-privileges by default for new containers
+      --node-generic-resource list            Advertise user-defined resource
       --oom-score-adjust int                  Set the oom_score_adj for the daemon (default -500)
   -p, --pidfile string                        Path to use for daemon PID file (default "/var/run/docker.pid")
       --raw-logs                              Full timestamps without ANSI coloring
-      --registry-mirror list                  Preferred Docker registry mirror (default [])
+      --registry-mirror list                  Preferred Docker registry mirror
+      --rootless                              Enable rootless mode; typically used with RootlessKit
       --seccomp-profile string                Path to seccomp profile
       --selinux-enabled                       Enable selinux support
       --shutdown-timeout int                  Set the default shutdown timeout (default 15)
   -s, --storage-driver string                 Storage driver to use
-      --storage-opt list                      Storage driver options (default [])
+      --storage-opt list                      Storage driver options
       --swarm-default-advertise-addr string   Set default address or interface for swarm advertised address
       --tls                                   Use TLS; implied by --tlsverify
       --tlscacert string                      Trust certs signed only by this CA (default "~/.docker/ca.pem")
       --tlscert string                        Path to TLS certificate file (default "~/.docker/cert.pem")
-      --tlskey string                         Path to TLS key file (default ~/.docker/key.pem")
+      --tlskey string                         Path to TLS key file (default "~/.docker/key.pem")
       --tlsverify                             Use TLS and verify the remote
       --userland-proxy                        Use userland proxy for loopback traffic (default true)
       --userland-proxy-path string            Path to the userland proxy binary
@@ -109,16 +115,29 @@ type `dockerd`.
 To run the daemon with debug output, use `dockerd -D` or add `"debug": true` to
 the `daemon.json` file.
 
-> **Note**: In Docker 1.13 and higher, enable experimental features by starting
-> `dockerd` with the `--experimental` flag or adding `"experimental": true` to the
-> `daemon.json` file. In earlier Docker versions, a different build was required
-> to enable experimental features.
+> **Enabling experimental features**
+> 
+> Enable experimental features by starting `dockerd` with the `--experimental`
+> flag or adding `"experimental": true` to the `daemon.json` file.
+
+### Environment variables
+
+For easy reference, the following list of environment variables are supported
+by the `dockerd` command line:
+
+* `DOCKER_DRIVER` The graph driver to use.
+* `DOCKER_NOWARN_KERNEL_VERSION` Prevent warnings that your Linux kernel is
+  unsuitable for Docker.
+* `DOCKER_RAMDISK` If set this will disable 'pivot_root'.
+* `DOCKER_TMPDIR` Location for temporary Docker files.
+* `MOBY_DISABLE_PIGZ` Do not use [`unpigz`](https://linux.die.net/man/1/pigz) to
+  decompress layers in parallel when pulling images, even if it is installed.
 
 ## Examples
 
 ### Daemon socket option
 
-The Docker daemon can listen for [Docker Engine API](../api/)
+The Docker daemon can listen for [Docker Engine API](https://docs.docker.com/engine/api/)
 requests via three different types of Socket: `unix`, `tcp`, and `fd`.
 
 By default, a `unix` domain socket (or IPC socket) is created at
@@ -135,7 +154,9 @@ interface using its IP address: `-H tcp://192.168.59.103:2375`. It is
 conventional to use port `2375` for un-encrypted, and port `2376` for encrypted
 communication with the daemon.
 
-> **Note**: If you're using an HTTPS encrypted socket, keep in mind that only
+> **Note**
+>
+> If you're using an HTTPS encrypted socket, keep in mind that only
 > TLS1.0 and greater are supported. Protocols SSLv3 and under are not
 > supported anymore for security reasons.
 
@@ -269,7 +290,7 @@ $ docker -H tcp://127.0.0.1:2375 pull ubuntu
 ### Daemon storage-driver
 
 On Linux, the Docker daemon has support for several different image layer storage
-drivers: `aufs`, `devicemapper`, `btrfs`, `zfs`, `overlay` and `overlay2`.
+drivers: `aufs`, `devicemapper`, `btrfs`, `zfs`, `overlay`, `overlay2`, and `fuse-overlayfs`.
 
 The `aufs` driver is the oldest, but is based on a Linux kernel patch-set that
 is unlikely to be merged into the main kernel. These are also known to cause
@@ -300,21 +321,28 @@ The `overlay` is a very fast union filesystem. It is now merged in the main
 Linux kernel as of [3.18.0](https://lkml.org/lkml/2014/10/26/137). `overlay`
 also supports page cache sharing, this means multiple containers accessing
 the same file can share a single page cache entry (or entries), it makes
-`overlay` as efficient with memory as `aufs` driver. Call
-`dockerd -s overlay` to use it.
-
-> **Note**: As promising as `overlay` is, the feature is still quite young and
-> should not be used in production. Most notably, using `overlay` can cause
-> excessive inode consumption (especially as the number of images grows), as
-> well as being incompatible with the use of RPMs.
+`overlay` as efficient with memory as `aufs` driver. Call `dockerd -s overlay`
+to use it.
 
 The `overlay2` uses the same fast union filesystem but takes advantage of
 [additional features](https://lkml.org/lkml/2015/2/11/106) added in Linux
 kernel 4.0 to avoid excessive inode consumption. Call `dockerd -s overlay2`
 to use it.
 
-> **Note**: Both `overlay` and `overlay2` are currently unsupported on `btrfs`
+> **Note**
+>
+> The `overlay` storage driver can cause excessive inode consumption (especially
+> as the number of images grows). We recommend using the `overlay2` storage
+> driver instead.
+
+
+> **Note**
+>
+> Both `overlay` and `overlay2` are currently unsupported on `btrfs`
 > or any Copy on Write filesystem and should only be used over `ext4` partitions.
+
+The `fuse-overlayfs` driver is similar to `overlay2` but works in userspace.
+The `fuse-overlayfs` driver is expected to be used for [Rootless mode](https://docs.docker.com/engine/security/rootless/).
 
 On Windows, the Docker daemon supports a single image layer storage driver
 depending on the image platform: `windowsfilter` for Windows images, and
@@ -460,7 +488,9 @@ $ sudo service docker start
 
 ##### `dm.loopdatasize`
 
-> **Note**: This option configures devicemapper loopback, which should not
+> **Note**
+>
+> This option configures devicemapper loopback, which should not
 > be used in production.
 
 Specifies the size to use when creating the loopback file for the
@@ -476,7 +506,9 @@ $ sudo dockerd --storage-opt dm.loopdatasize=200G
 
 ##### `dm.loopmetadatasize`
 
-> **Note**: This option configures devicemapper loopback, which should not
+> **Note**
+>
+> This option configures devicemapper loopback, which should not
 > be used in production.
 
 Specifies the size to use when creating the loopback file for the
@@ -623,7 +655,9 @@ $ sudo dockerd --storage-opt dm.override_udev_sync_check=true
 When this value is `true`, the  `devicemapper` continues and simply warns
 you the errors are happening.
 
-> **Note**: The ideal is to pursue a `docker` daemon and environment that does
+> **Note**
+>
+> The ideal is to pursue a `docker` daemon and environment that does
 > support synchronizing with `udev`. For further discussion on this
 > topic, see [docker#4036](https://github.com/docker/docker/issues/4036).
 > Otherwise, set this flag for migrating existing Docker daemons to
@@ -658,7 +692,7 @@ thin pool device deletion is synchronous. Before a container is deleted,
 the Docker daemon removes any associated devices. If the storage driver
 can not remove a device, the container deletion fails and daemon returns.
 
-```none
+```console
 Error deleting container: Error response from daemon: Cannot destroy container
 ```
 
@@ -955,7 +989,9 @@ This is the same example via the command line:
 $ sudo dockerd --add-runtime runc=runc --add-runtime custom=/usr/local/bin/my-runc-replacement
 ```
 
-> **Note**: Defining runtime arguments via the command line is not supported.
+> **Note**
+>
+> Defining runtime arguments via the command line is not supported.
 
 #### Options for the runtime
 
@@ -966,7 +1002,8 @@ single `native.cgroupdriver` option is available.
 The `native.cgroupdriver` option specifies the management of the container's
 cgroups. You can only specify `cgroupfs` or `systemd`. If you specify
 `systemd` and it is not available, the system errors out. If you omit the
-`native.cgroupdriver` option,` cgroupfs` is used.
+`native.cgroupdriver` option,` cgroupfs` is used on cgroup v1 hosts, `systemd`
+is used on cgroup v2 hosts with systemd available.
 
 This example sets the `cgroupdriver` to `systemd`:
 
@@ -1244,9 +1281,9 @@ to avoid collisions with other prometheus exporters and services.
 
 If you are running a prometheus server you can add this address to your scrape configs
 to have prometheus collect metrics on Docker.  For more information
-on prometheus you can view the website [here](https://prometheus.io/).
+on prometheus refer to the [prometheus website](https://prometheus.io/).
 
-```none
+```yaml
 scrape_configs:
   - job_name: 'docker'
     static_configs:
@@ -1270,7 +1307,7 @@ the task to run.
 Example of usage:
 ```json
 {
-	"node-generic-resources": ["NVIDIA-GPU=UUID1", "NVIDIA-GPU=UUID2"]
+  "node-generic-resources": ["NVIDIA-GPU=UUID1", "NVIDIA-GPU=UUID2"]
 }
 ```
 
@@ -1299,102 +1336,104 @@ This is a full example of the allowed configuration options on Linux:
 
 ```json
 {
-	"authorization-plugins": [],
-	"data-root": "",
-	"default-cgroupns-mode": "private",
-	"dns": [],
-	"dns-opts": [],
-	"dns-search": [],
-	"exec-opts": [],
-	"exec-root": "",
-	"experimental": false,
-	"features": {},
-	"storage-driver": "",
-	"storage-opts": [],
-	"labels": [],
-	"live-restore": true,
-	"log-driver": "json-file",
-	"log-opts": {
-		"max-size": "10m",
-		"max-file":"5",
-		"labels": "somelabel",
-		"env": "os,customer"
-	},
-	"mtu": 0,
-	"pidfile": "",
-	"cluster-store": "",
-	"cluster-store-opts": {},
-	"cluster-advertise": "",
-	"max-concurrent-downloads": 3,
-	"max-concurrent-uploads": 5,
-	"max-download-attempts": 5,
-	"default-shm-size": "64M",
-	"shutdown-timeout": 15,
-	"debug": true,
-	"hosts": [],
-	"log-level": "",
-	"tls": true,
-	"tlsverify": true,
-	"tlscacert": "",
-	"tlscert": "",
-	"tlskey": "",
-	"swarm-default-advertise-addr": "",
-	"api-cors-header": "",
-	"selinux-enabled": false,
-	"userns-remap": "",
-	"group": "",
-	"cgroup-parent": "",
-	"default-ulimits": {
-		"nofile": {
-			"Name": "nofile",
-			"Hard": 64000,
-			"Soft": 64000
-		}
-	},
-	"init": false,
-	"init-path": "/usr/libexec/docker-init",
-	"ipv6": false,
-	"iptables": false,
-	"ip-forward": false,
-	"ip-masq": false,
-	"userland-proxy": false,
-	"userland-proxy-path": "/usr/libexec/docker-proxy",
-	"ip": "0.0.0.0",
-	"bridge": "",
-	"bip": "",
-	"fixed-cidr": "",
-	"fixed-cidr-v6": "",
-	"default-gateway": "",
-	"default-gateway-v6": "",
-	"icc": false,
-	"raw-logs": false,
-	"allow-nondistributable-artifacts": [],
-	"registry-mirrors": [],
-	"seccomp-profile": "",
-	"insecure-registries": [],
-	"no-new-privileges": false,
-	"default-runtime": "runc",
-	"oom-score-adjust": -500,
-	"node-generic-resources": ["NVIDIA-GPU=UUID1", "NVIDIA-GPU=UUID2"],
-	"runtimes": {
-		"cc-runtime": {
-			"path": "/usr/bin/cc-runtime"
-		},
-		"custom": {
-			"path": "/usr/local/bin/my-runc-replacement",
-			"runtimeArgs": [
-				"--debug"
-			]
-		}
-	},
-	"default-address-pools":[
-		{"base":"172.80.0.0/16","size":24},
-		{"base":"172.90.0.0/16","size":24}
-	]
+  "authorization-plugins": [],
+  "data-root": "",
+  "default-cgroupns-mode": "private",
+  "dns": [],
+  "dns-opts": [],
+  "dns-search": [],
+  "exec-opts": [],
+  "exec-root": "",
+  "experimental": false,
+  "features": {},
+  "storage-driver": "",
+  "storage-opts": [],
+  "labels": [],
+  "live-restore": true,
+  "log-driver": "json-file",
+  "log-opts": {
+    "max-size": "10m",
+    "max-file":"5",
+    "labels": "somelabel",
+    "env": "os,customer"
+  },
+  "mtu": 0,
+  "pidfile": "",
+  "cluster-store": "",
+  "cluster-store-opts": {},
+  "cluster-advertise": "",
+  "max-concurrent-downloads": 3,
+  "max-concurrent-uploads": 5,
+  "max-download-attempts": 5,
+  "default-shm-size": "64M",
+  "shutdown-timeout": 15,
+  "debug": true,
+  "hosts": [],
+  "log-level": "",
+  "tls": true,
+  "tlsverify": true,
+  "tlscacert": "",
+  "tlscert": "",
+  "tlskey": "",
+  "swarm-default-advertise-addr": "",
+  "api-cors-header": "",
+  "selinux-enabled": false,
+  "userns-remap": "",
+  "group": "",
+  "cgroup-parent": "",
+  "default-ulimits": {
+    "nofile": {
+      "Name": "nofile",
+      "Hard": 64000,
+      "Soft": 64000
+    }
+  },
+  "init": false,
+  "init-path": "/usr/libexec/docker-init",
+  "ipv6": false,
+  "iptables": false,
+  "ip-forward": false,
+  "ip-masq": false,
+  "userland-proxy": false,
+  "userland-proxy-path": "/usr/libexec/docker-proxy",
+  "ip": "0.0.0.0",
+  "bridge": "",
+  "bip": "",
+  "fixed-cidr": "",
+  "fixed-cidr-v6": "",
+  "default-gateway": "",
+  "default-gateway-v6": "",
+  "icc": false,
+  "raw-logs": false,
+  "allow-nondistributable-artifacts": [],
+  "registry-mirrors": [],
+  "seccomp-profile": "",
+  "insecure-registries": [],
+  "no-new-privileges": false,
+  "default-runtime": "runc",
+  "oom-score-adjust": -500,
+  "node-generic-resources": ["NVIDIA-GPU=UUID1", "NVIDIA-GPU=UUID2"],
+  "runtimes": {
+    "cc-runtime": {
+      "path": "/usr/bin/cc-runtime"
+    },
+    "custom": {
+      "path": "/usr/local/bin/my-runc-replacement",
+      "runtimeArgs": [
+        "--debug"
+      ]
+    }
+  },
+  "default-address-pools":[
+    {"base":"172.80.0.0/16","size":24},
+    {"base":"172.90.0.0/16","size":24}
+  ]
 }
 ```
 
-> **Note:** You cannot set options in `daemon.json` that have already been set on
+> **Note:**
+>
+> You cannot set options in `daemon.json` that have already been set on
 > daemon startup as a flag.
 > On systems that use `systemd` to start the Docker daemon, `-H` is already set, so
 > you cannot use the `hosts` key in `daemon.json` to add listening addresses.
@@ -1411,42 +1450,42 @@ This is a full example of the allowed configuration options on Windows:
 
 ```json
 {
-    "authorization-plugins": [],
-    "data-root": "",
-    "dns": [],
-    "dns-opts": [],
-    "dns-search": [],
-    "exec-opts": [],
-    "experimental": false,
-    "features":{},
-    "storage-driver": "",
-    "storage-opts": [],
-    "labels": [],
-    "log-driver": "",
-    "mtu": 0,
-    "pidfile": "",
-    "cluster-store": "",
-    "cluster-advertise": "",
-    "max-concurrent-downloads": 3,
-    "max-concurrent-uploads": 5,
-    "max-download-attempts": 5,
-    "shutdown-timeout": 15,
-    "debug": true,
-    "hosts": [],
-    "log-level": "",
-    "tlsverify": true,
-    "tlscacert": "",
-    "tlscert": "",
-    "tlskey": "",
-    "swarm-default-advertise-addr": "",
-    "group": "",
-    "default-ulimits": {},
-    "bridge": "",
-    "fixed-cidr": "",
-    "raw-logs": false,
-    "allow-nondistributable-artifacts": [],
-    "registry-mirrors": [],
-    "insecure-registries": []
+  "authorization-plugins": [],
+  "data-root": "",
+  "dns": [],
+  "dns-opts": [],
+  "dns-search": [],
+  "exec-opts": [],
+  "experimental": false,
+  "features":{},
+  "storage-driver": "",
+  "storage-opts": [],
+  "labels": [],
+  "log-driver": "",
+  "mtu": 0,
+  "pidfile": "",
+  "cluster-store": "",
+  "cluster-advertise": "",
+  "max-concurrent-downloads": 3,
+  "max-concurrent-uploads": 5,
+  "max-download-attempts": 5,
+  "shutdown-timeout": 15,
+  "debug": true,
+  "hosts": [],
+  "log-level": "",
+  "tlsverify": true,
+  "tlscacert": "",
+  "tlscert": "",
+  "tlskey": "",
+  "swarm-default-advertise-addr": "",
+  "group": "",
+  "default-ulimits": {},
+  "bridge": "",
+  "fixed-cidr": "",
+  "raw-logs": false,
+  "allow-nondistributable-artifacts": [],
+  "registry-mirrors": [],
+  "insecure-registries": []
 }
 ```
 
@@ -1514,7 +1553,7 @@ by providing them as flags, or by using a [daemon configuration file](#daemon-co
 
 The following daemon options must be configured for each daemon:
 
-```none
+```console
 -b, --bridge=                          Attach containers to a network bridge
 --exec-root=/var/run/docker            Root of the Docker execdriver
 --data-root=/var/lib/docker            Root of persisted Docker data

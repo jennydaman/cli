@@ -34,8 +34,8 @@ Refer to the [filtering](#filtering) section for more information about availabl
 ```bash
 $ docker plugin ls
 
-ID                  NAME                             TAG                 DESCRIPTION                ENABLED
-69553ca1d123        tiborvass/sample-volume-plugin   latest              A test plugin for Docker   true
+ID            NAME                                    DESCRIPTION                ENABLED
+69553ca1d123  tiborvass/sample-volume-plugin:latest   A test plugin for Docker   true
 ```
 
 ### Filtering
@@ -65,7 +65,7 @@ Installed plugin vieux/sshfs
 
 $ docker plugin ls --filter enabled=true
 
-NAME                  TAG                 DESCRIPTION                ENABLED
+ID                  NAME                DESCRIPTION         ENABLED
 ```
 
 ### Formatting
@@ -75,10 +75,10 @@ using a Go template.
 
 Valid placeholders for the Go template are listed below:
 
-Placeholder    | Description
----------------|------------------------------------------------------------------------------------------
+Placeholder        | Description
+-------------------|------------------------------------------------------------
 `.ID`              | Plugin ID
-`.Name`            | Plugin name
+`.Name`            | Plugin name and tag
 `.Description`     | Plugin description
 `.Enabled`         | Whether plugin is enabled or not
 `.PluginReference` | The reference used to push/pull from a registry
@@ -88,7 +88,7 @@ output the data exactly as the template declares or, when using the
 `table` directive, includes column headers as well.
 
 The following example uses a template without headers and outputs the
-`ID` and `Name` entries separated by a colon for all plugins:
+`ID` and `Name` entries separated by a colon (`:`) for all plugins:
 
 ```bash
 $ docker plugin ls --format "{{.ID}}: {{.Name}}"

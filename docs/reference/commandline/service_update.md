@@ -13,6 +13,8 @@ Update a service
 
 Options:
       --args command                       Service command args
+      --cap-add list                       Add Linux capabilities
+      --cap-drop list                      Drop Linux capabilities
       --config-add config                  Add or update a config file on a service
       --config-rm list                     Remove a configuration file
       --constraint-add list                Add or update a placement constraint
@@ -52,8 +54,10 @@ Options:
       --label-rm list                      Remove a label by its key
       --limit-cpu decimal                  Limit CPUs
       --limit-memory bytes                 Limit Memory
+      --limit-pids int                     Limit maximum number of processes (default 0 = unlimited)
       --log-driver string                  Logging driver for service
       --log-opt list                       Logging driver options
+      --max-concurrent                     Number of job tasks to run at once (default equal to --replicas)
       --mount-add mount                    Add or update a mount on a service
       --mount-rm list                      Remove a mount by its target path
       --network-add network                Add a network
@@ -87,6 +91,8 @@ Options:
       --sysctl-add list                    Add or update a Sysctl option
       --sysctl-rm list                     Remove a Sysctl option
   -t, --tty                                Allocate a pseudo-TTY
+      --ulimit-add ulimit                  Add or update a ulimit option (default [])
+      --ulimit-rm list                     Remove a ulimit option
       --update-delay duration              Delay between updates (ns|us|ms|s|m|h)
       --update-failure-action string       Action on update failure ("pause"|"continue"|"rollback")
       --update-max-failure-ratio float     Failure rate to tolerate during an update
@@ -110,9 +116,12 @@ service requires recreating the tasks for it to take effect. For example, only c
 setting. However, the `--force` flag will cause the tasks to be recreated anyway. This can be used to perform a
 rolling restart without any changes to the service parameters.
 
-> **Note**: This is a cluster management command, and must be executed on a swarm
-> manager node. To learn about managers and workers, refer to the [Swarm mode
-> section](https://docs.docker.com/engine/swarm/) in the documentation.
+> **Note**
+>
+> This is a cluster management command, and must be executed on a swarm
+> manager node. To learn about managers and workers, refer to the
+> [Swarm mode section](https://docs.docker.com/engine/swarm/) in the
+> documentation.
 
 ## Examples
 
@@ -147,25 +156,21 @@ point, effectively removing the `test-data` volume. Each command returns the
 service name.
 
 - The `--mount-add` flag takes the same parameters as the `--mount` flag on
-  `service create`. Refer to the [volumes and
-  bind mounts](service_create.md#volumes-and-bind-mounts-mount) section in the
-  `service create` reference for details.
+  `service create`. Refer to the [volumes and bind mounts](service_create.md#add-bind-mounts-volumes-or-memory-filesystems)
+  section in the `service create` reference for details.
 
 - The `--mount-rm` flag takes the `target` path of the mount.
 
 ```bash
 $ docker service create \
     --name=myservice \
-    --mount \
-      type=volume,source=test-data,target=/somewhere \
-    nginx:alpine \
-    myservice
+    --mount type=volume,source=test-data,target=/somewhere \
+    nginx:alpine
 
 myservice
 
 $ docker service update \
-    --mount-add \
-      type=volume,source=other-volume,target=/somewhere-else \
+    --mount-add type=volume,source=other-volume,target=/somewhere-else \
     myservice
 
 myservice
@@ -179,7 +184,7 @@ myservice
 
 Use the `--publish-add` or `--publish-rm` flags to add or remove a published
 port for a service. You can use the short or long syntax discussed in the
-[docker service create](service_create/#publish-service-ports-externally-to-the-swarm)
+[docker service create](service_create.md#publish-service-ports-externally-to-the-swarm--p---publish)
 reference.
 
 The following example adds a published service port to an existing service.
@@ -194,7 +199,7 @@ $ docker service update \
 
 Use the `--network-add` or `--network-rm` flags to add or remove a network for
 a service. You can use the short or long syntax discussed in the
-[docker service create](service_create/#attach-a-service-to-an-existing-network-network)
+[docker service create](service_create.md#attach-a-service-to-an-existing-network---network)
 reference.
 
 The following example adds a new alias name to an existing service already connected to network my-network:
@@ -288,13 +293,30 @@ $ docker service update \
 ### Update services using templates
 
 Some flags of `service update` support the use of templating.
-See [`service create`](./service_create.md#templating) for the reference.
+See [`service create`](service_create.md#create-services-using-templates) for the reference.
 
 
 ### Specify isolation mode (Windows)
 
 `service update` supports the same `--isolation` flag as `service create`
-See [`service create`](./service_create.md) for the reference.
+See [`service create`](service_create.md) for the reference.
+
+### Updating Jobs
+
+When a service is created as a job, by setting its mode to `replicated-job` or
+to `global-job` when doing `service create`, options for updating it are
+limited.
+
+Updating a Job immediately stops any Tasks that are in progress. The operation
+creates a new set of Tasks for the job and effectively resets its completion
+status. If any Tasks were running before the update, they are stopped, and new
+Tasks are created.
+
+Jobs cannot be rolled out or rolled back. None of the flags for configuring
+update or rollback settings are valid with job modes.
+
+To run a job again with the same parameters that it was run previously, it can
+be force updated with the `--force` flag.
 
 ## Related commands
 

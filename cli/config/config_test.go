@@ -3,7 +3,6 @@ package config
 import (
 	"bytes"
 	"fmt"
-	"io"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -13,7 +12,6 @@ import (
 
 	"github.com/docker/cli/cli/config/configfile"
 	"github.com/docker/cli/cli/config/credentials"
-	"github.com/pkg/errors"
 	"gotest.tools/v3/assert"
 	is "gotest.tools/v3/assert/cmp"
 	"gotest.tools/v3/env"
@@ -89,8 +87,7 @@ func TestEmptyFile(t *testing.T) {
 	assert.NilError(t, err)
 
 	_, err = Load(tmpHome)
-	assert.Equal(t, errors.Cause(err), io.EOF)
-	assert.ErrorContains(t, err, ConfigFileName)
+	assert.NilError(t, err)
 }
 
 func TestEmptyJSON(t *testing.T) {
@@ -385,6 +382,7 @@ func TestJSONWithCredentialHelpers(t *testing.T) {
 
 // Save it and make sure it shows up in new form
 func saveConfigAndValidateNewFormat(t *testing.T, config *configfile.ConfigFile, configDir string) string {
+	t.Helper()
 	assert.NilError(t, config.Save())
 
 	buf, err := ioutil.ReadFile(filepath.Join(configDir, ConfigFileName))

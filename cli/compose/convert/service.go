@@ -14,6 +14,7 @@ import (
 	"github.com/docker/docker/api/types/swarm"
 	"github.com/docker/docker/api/types/versions"
 	"github.com/docker/docker/client"
+	"github.com/docker/go-units"
 	"github.com/pkg/errors"
 )
 
@@ -117,6 +118,8 @@ func Service(
 		}
 	}
 
+	capAdd, capDrop := opts.EffectiveCapAddCapDrop(service.CapAdd, service.CapDrop)
+
 	serviceSpec := swarm.ServiceSpec{
 		Annotations: swarm.Annotations{
 			Name:   name,
@@ -147,6 +150,9 @@ func Service(
 				Isolation:       container.Isolation(service.Isolation),
 				Init:            service.Init,
 				Sysctls:         service.Sysctls,
+				CapabilityAdd:   capAdd,
+				CapabilityDrop:  capDrop,
+				Ulimits:         convertUlimits(service.Ulimits),
 			},
 			LogDriver:     logDriver,
 			Resources:     resources,
@@ -531,9 +537,10 @@ func convertResources(source composetypes.Resources) (*swarm.ResourceRequirement
 				return nil, err
 			}
 		}
-		resources.Limits = &swarm.Resources{
+		resources.Limits = &swarm.Limit{
 			NanoCPUs:    cpus,
 			MemoryBytes: int64(source.Limits.MemoryBytes),
+			Pids:        source.Limits.Pids,
 		}
 	}
 	if source.Reservations != nil {
@@ -674,4 +681,31 @@ func convertCredentialSpec(namespace Namespace, spec composetypes.CredentialSpec
 		return nil, errors.Errorf("invalid credential spec: spec specifies config %v, but no such config can be found", swarmCredSpec.Config)
 	}
 	return &swarmCredSpec, nil
+}
+
+func convertUlimits(origUlimits map[string]*composetypes.UlimitsConfig) []*units.Ulimit {
+	newUlimits := make(map[string]*units.Ulimit)
+	for name, u := range origUlimits {
+		if u.Single != 0 {
+			newUlimits[name] = &units.Ulimit{
+				Name: name,
+				Soft: int64(u.Single),
+				Hard: int64(u.Single),
+			}
+		} else {
+			newUlimits[name] = &units.Ulimit{
+				Name: name,
+				Soft: int64(u.Soft),
+				Hard: int64(u.Hard),
+			}
+		}
+	}
+	var ulimits []*units.Ulimit
+	for _, ulimit := range newUlimits {
+		ulimits = append(ulimits, ulimit)
+	}
+	sort.SliceStable(ulimits, func(i, j int) bool {
+		return ulimits[i].Name < ulimits[j].Name
+	})
+	return ulimits
 }

@@ -28,9 +28,12 @@ describes all the details of the format.
 
 For detailed information about using secrets, refer to [manage sensitive data with Docker secrets](https://docs.docker.com/engine/swarm/secrets/).
 
-> **Note**: This is a cluster management command, and must be executed on a swarm
-> manager node. To learn about managers and workers, refer to the [Swarm mode
-> section](https://docs.docker.com/engine/swarm/) in the documentation.
+> **Note**
+>
+> This is a cluster management command, and must be executed on a swarm
+> manager node. To learn about managers and workers, refer to the
+> [Swarm mode section](https://docs.docker.com/engine/swarm/) in the
+> documentation.
 
 ## Examples
 
@@ -47,25 +50,29 @@ ID                          NAME                CREATED             UPDATED
 eo7jnzguqgtpdah3cm5srfb97   my_secret           3 minutes ago       3 minutes ago
 ```
 
-```none
+```bash
 $ docker secret inspect secret.json
+```
 
+The output is in JSON format, for example:
+
+```json
 [
-    {
-        "ID": "eo7jnzguqgtpdah3cm5srfb97",
-        "Version": {
-            "Index": 17
-        },
-        "CreatedAt": "2017-03-24T08:15:09.735271783Z",
-        "UpdatedAt": "2017-03-24T08:15:09.735271783Z",
-        "Spec": {
-            "Name": "my_secret",
-            "Labels": {
-                "env": "dev",
-                "rev": "20170324"
-            }
-        }
+  {
+    "ID": "eo7jnzguqgtpdah3cm5srfb97",
+    "Version": {
+      "Index": 17
+    },
+    "CreatedAt": "2017-03-24T08:15:09.735271783Z",
+    "UpdatedAt": "2017-03-24T08:15:09.735271783Z",
+    "Spec": {
+      "Name": "my_secret",
+      "Labels": {
+        "env": "dev",
+        "rev": "20170324"
+      }
     }
+  }
 ]
 ```
 

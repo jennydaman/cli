@@ -15,9 +15,9 @@ Options:
       --details        Show extra details provided to logs
   -f, --follow         Follow log output
       --help           Print usage
-      --since string   Show logs since timestamp (e.g. 2013-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)
-      --until string   Show logs before timestamp (e.g. 2013-01-02T13:23:37) or relative (e.g. 42m for 42 minutes)
-      --tail string    Number of lines to show from the end of the logs (default "all")
+      --since string   Show logs since timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)
+      --until string   Show logs before timestamp (e.g. 2013-01-02T13:23:37Z) or relative (e.g. 42m for 42 minutes)
+  -n, --tail string    Number of lines to show from the end of the logs (default "all")
   -t, --timestamps     Show timestamps
 ```
 
@@ -25,8 +25,10 @@ Options:
 
 The `docker logs` command batch-retrieves logs present at the time of execution.
 
-> **Note**: this command is only functional for containers that are started with
-> the `json-file` or `journald` logging driver.
+> **Note**
+>
+> This command is only functional for containers that are started with the
+> `json-file` or `journald` logging driver.
 
 For more information about selecting and configuring logging drivers, refer to
 [Configure logging drivers](https://docs.docker.com/config/containers/logging/configure/).

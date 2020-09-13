@@ -50,6 +50,10 @@ The table below provides an overview of the current status of deprecated feature
 
 Status     | Feature                                                                                                                            | Deprecated | Remove
 -----------|------------------------------------------------------------------------------------------------------------------------------------|------------|------------
+Deprecated | [Kernel memory limit](#kernel-memory-limit)                                                                                        | v20.03.0   | -
+Deprecated | [Classic Swarm and overlay networks using external key/value stores](#classic-swarm-and-overlay-networks-using-cluster-store)      | v20.03.0   | -
+Deprecated | [Support for the legacy `~/.dockercfg` configuration file for authentication](#support-for-legacy-dockercfg-configuration-files)   | v20.03.0   | -
+Deprecated | [CLI plugins support](#cli-plugins-support)                                                                                        | v20.03.0   | -
 Deprecated | [Pushing and pulling with image manifest v2 schema 1](#pushing-and-pulling-with-image-manifest-v2-schema-1)                        | v19.03.0   | v20.03.0
 Removed    | [`docker engine` subcommands](#docker-engine-subcommands)                                                                          | v19.03.0   | v20.03.0
 Removed    | [Top-level `docker deploy` subcommand (experimental)](#top-level-docker-deploy-subcommand-experimental)                            | v19.03.0   | v20.03.0
@@ -87,6 +91,43 @@ Removed    | [`--api-enable-cors` flag on `dockerd`](#--api-enable-cors-flag-on-
 Removed    | [`--run` flag on `docker commit`](#--run-flag-on-docker-commit)                                                                    | v0.10.0    | v1.13.0
 Removed    | [Three arguments form in `docker import`](#three-arguments-form-in-docker-import)                                                  | v0.6.7     | v1.12.0
 
+### Kernel memory limit
+
+**Deprecated in Release: v20.03.0**
+
+Specifying kernel memory limit (`docker run --kernel-memory`) is now marked as deprecated,
+as [Linux kernel deprecated `kmem.limit_in_bytes` in v5.4](https://github.com/torvalds/linux/commit/0158115f702b0ba208ab0b5adf44cae99b3ebcc7).
+
+### Classic Swarm and overlay networks using cluster store
+
+**Deprecated in Release: v20.03.0**
+
+Standalone ("classic") Swarm has been deprecated, and with that the use of overlay
+networks using an external key/value store. The corresponding`--cluster-advertise`,
+`--cluster-store`, and `--cluster-store-opt` daemon options have been marked
+deprecated, and will be disabled or removed in a future release.
+
+
+### Support for legacy `~/.dockercfg` configuration files
+
+**Deprecated in Release: v20.03.0**
+
+The docker CLI up until v1.7.0 used the `~/.dockercfg` file to store credentials
+after authenticating to a registry (`docker login`). Docker v1.7.0 replaced this
+file with a new CLI configuration file, located in `~/.docker/config.json`. When
+implementing the new configuration file, the old file (and file-format) was kept
+as a fall-back, to assist existing users with migrating to the new file.
+
+Given that the old file format encourages insecure storage of credentials
+(credentials are stored unencrypted), and that no version of the CLI since
+Docker v1.7.0 has created this file, the file is marked deprecated, and support
+for this file will be removed in a future release.
+
+### CLI plugins support
+
+**Deprecated in Release: v20.03.0**
+
+CLI Plugin API is now marked as deprecated.
 
 ### Pushing and pulling with image manifest v2 schema 1
 

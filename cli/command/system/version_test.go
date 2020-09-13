@@ -21,7 +21,7 @@ func TestVersionWithoutServer(t *testing.T) {
 		},
 	})
 	cmd := NewVersionCommand(cli)
-	cmd.SetOutput(cli.Err())
+	cmd.SetOut(cli.Err())
 	assert.ErrorContains(t, cmd.Execute(), "no server")
 	out := cli.OutBuffer().String()
 	// TODO: use an assertion like e2e/image/build_test.go:assertBuildOutput()
@@ -41,6 +41,7 @@ func TestVersionAlign(t *testing.T) {
 			Os:                "linux",
 			Arch:              "amd64",
 			BuildTime:         "Wed May 30 22:21:05 2018",
+			Context:           "my-context",
 			Experimental:      true,
 		},
 		Server: &types.Version{},

@@ -3,7 +3,6 @@ package manifest
 import (
 	"github.com/docker/cli/cli"
 	"github.com/docker/cli/cli/command"
-	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 )
 
@@ -32,15 +31,6 @@ func runRm(dockerCli command.Cli, opts rmOpts) error {
 	targetRef, err := normalizeReference(opts.target)
 	if err != nil {
 		return err
-	}
-
-	manifests, err := dockerCli.ManifestStore().GetList(targetRef)
-	if err != nil {
-		return err
-	}
-
-	if len(manifests) == 0 {
-		return errors.Errorf("%s not found", targetRef)
 	}
 
 	return dockerCli.ManifestStore().Remove(targetRef)
